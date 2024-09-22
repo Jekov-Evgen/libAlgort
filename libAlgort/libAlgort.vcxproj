@@ -127,10 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="prototype.h" />
+    <ClInclude Include="ALGORT.h" />
+    <ClInclude Include="BasicAlgorithms.h" />
+    <ClInclude Include="Queues.h" />
+    <ClInclude Include="SinglyLinkedList.h" />
+    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="implementation.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
