@@ -6,6 +6,7 @@ namespace stack_area
 	class Stack {
 	private:
 		int size;
+		int currentCapacity;
 		T* stackSpace;
 	public:
 		Stack();
@@ -22,81 +23,66 @@ namespace stack_area
 namespace stack_area
 {
 	template<typename T>
-	inline Stack<T>::Stack()
-	{
+	inline Stack<T>::Stack() {
 		size = 0;
-		stackSpace = nullptr;
+		currentCapacity = 1;
+		stackSpace = new T[currentCapacity];
 	}
 
 	template<typename T>
-	Stack<T>::~Stack()
-	{
+	Stack<T>::~Stack() {
 		delete[] stackSpace;
 	}
 
 	template<typename T>
-	void Stack<T>::addingToTheStack(T data)
-	{
+	void Stack<T>::addingToTheStack(T data) {
 		if (emptinessCheck() == true) {
 			stackSpace = new T[1];
 			stackSpace[0] = data;
-			size = 1;
+			currentCapacity = 1;
 		}
 		else {
-			T* temporaryStorage = new T[size];
+			if (size == currentCapacity) {
+				currentCapacity = currentCapacity + (currentCapacity / 2);
+				T* temporaryStorage = new T[currentCapacity];
 
-			for (int i = 0; i < size; i++)
-			{
-				temporaryStorage[i] = stackSpace[i];
-			}
+				for (int i = 0; i < size; i++) {
+					temporaryStorage[i] = stackSpace[i];
+				}
 
-			delete[] stackSpace;
-
-			stackSpace = new T[size + 1];
-
-			for (int i = 0; i < size; i++)
-			{
-				stackSpace[i] = temporaryStorage[i];
+				delete[] stackSpace;
+				stackSpace = temporaryStorage;
 			}
 
 			stackSpace[size] = data;
-			size++;
-
-			delete[] temporaryStorage;
 		}
+
+		size++;
 	}
 
 	template<typename T>
-	bool Stack<T>::emptinessCheck()
-	{
+	bool Stack<T>::emptinessCheck() {
 		return size == 0;
 	}
 
 	template<typename T>
-	void Stack<T>::removalFromTheTop()
-	{
-		if (emptinessCheck() == true) {
-			return;
+	void Stack<T>::removalFromTheTop() {
+		if (emptinessCheck()) {
+			return; 
 		}
-		else {
-			T* temporaryStorage = new T[size - 1];
 
-			for (int i = 0; i < size - 1; i++)
-			{
+		size--;
+
+		if (size < currentCapacity / 4 && currentCapacity > 1) {
+			currentCapacity = std::max(1, currentCapacity / 2);
+			T* temporaryStorage = new T[currentCapacity];
+
+			for (int i = 0; i < size; i++) {
 				temporaryStorage[i] = stackSpace[i];
 			}
 
 			delete[] stackSpace;
-
-			stackSpace = new T[size - 1];
-
-			for (int i = 0; i < size - 1; i++)
-			{
-				stackSpace[i] = temporaryStorage[i];
-			}
-
-			delete[] temporaryStorage;
-			size--;
+			stackSpace = temporaryStorage;
 		}
 	}
 

@@ -131,10 +131,8 @@
     <ClInclude Include="BasicAlgorithms.h" />
     <ClInclude Include="Queues.h" />
     <ClInclude Include="SinglyLinkedList.h" />
+    <ClInclude Include="SmartPointer.h" />
     <ClInclude Include="Stack.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
