@@ -16,7 +16,7 @@ namespace DynArr
     private:
         T* dynamicArr;
         int size;
-
+        int capacity;
     };
 }
 

@@ -1,17 +1,13 @@
 #include "C:\Users\Женя\source\repos\libAlgort\libAlgort\DynamicArray.h"
+#include <stdexcept>
 
 namespace DynArr 
 {
     template<typename T>
-    inline DynamicArray<T>::DynamicArray(int createSize) {
-        if (createSize > 0) {
-            this->size = createSize;
-            this->dynamicArr = new T[size];
-        }
-
-        for (int i = 0; i < this->size; i++) {
-            this->dynamicArr[i] = T();
-        }
+    inline DynamicArray<T>::DynamicArray(int cSize) {
+        this->size = 0;
+        this->capacity = (cSize > 0) ? cSize : 10;
+        this->dynamicArr = new T[capacity];
     }
 
     template<typename T>
@@ -31,58 +27,50 @@ namespace DynArr
 
     template<typename T>
     inline void DynamicArray<T>::push_back(const T& value) {
-        bool emptiness = false;
-
-        for (int i = 0; i < this->size; i++) {
-            if (this->dynamicArr[i] == T()) {
-                this->dynamicArr[i] = value;
-
-                emptiness = true;
-                break;
-            }
+        if (this->size < this->capacity) {
+            this->dynamicArr[size] = value;
+            size++;
         }
-
-        if (emptiness == false) {
-            T* temporaryStorage = new T[size];
+        else
+        {
+            capacity *= 2;
+            T* tempStorage = new T[capacity];
 
             for (int i = 0; i < this->size; i++) {
-                temporaryStorage[i] = this->dynamicArr[i];
+                tempStorage[i] = this->dynamicArr[i];
             }
 
             delete[] this->dynamicArr;
 
-            this->dynamicArr = new T[size + 1];
-
-            for (int i = 0; i < this->size; i++) {
-                this->dynamicArr[i] = temporaryStorage[i];
-            }
+            this->dynamicArr = tempStorage;
 
             dynamicArr[size] = value;
-            delete[] temporaryStorage;
-
-            this->size++;
+            size++;
         }
     }
 
     template<typename T>
     inline void DynamicArray<T>::pop_back() {
-        T* temporaryStorage = new T[size - 1];
+        if (this->size > 0) {
+            this->size--;
 
-        for (int i = 0; i < this->size - 1; i++) {
-            temporaryStorage[i] = this->dynamicArr[i];
+            if (this->size < this->capacity / 2) {
+                this->capacity /= 2;
+                T* tempStorage = new T[this->capacity];
+
+                for (int i = 0; i < this->size; ++i) {
+                    tempStorage[i] = this->dynamicArr[i];
+                }
+
+                delete[] this->dynamicArr;
+
+                this->dynamicArr = tempStorage;
+            }
         }
-
-        delete[] dynamicArr;
-
-        this->dynamicArr = new T[size - 1];
-
-        for (int i = 0; i < this->size - 1; i++) {
-            this->dynamicArr[i] = temporaryStorage[i];
+        else
+        {
+            throw std::out_of_range("Невозможно удалить");
         }
-
-        delete[] temporaryStorage;
-
-        this->size--;
     }
 
     template<typename T>
